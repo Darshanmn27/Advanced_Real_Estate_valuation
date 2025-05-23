@@ -1,0 +1,7 @@
+location,size,rooms,price
+"Downtown",3,3,300000
+"Suburb",1500,4,350000
+"Uptown",900,2,250000
+"Downtown",800,2,200000
+"Suburb",2000,5,450000
+"Uptown",1100,3,280000

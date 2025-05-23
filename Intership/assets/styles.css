@@ -1,0 +1,129 @@
+import dash
+from dash import dcc, html
+from dash.dependencies import Input, Output, State
+import pandas as pd
+import numpy as np
+import joblib
+import base64
+import io
+
+# Load your trained model
+model = joblib.load('models/Random_Forest.pkl')
+USD_TO_INR = 83.5
+
+app = dash.Dash(__name__)
+server = app.server  # for deployment
+
+app.layout = html.Div([
+    html.H1("🏠 Real Estate Price Predictor"),
+
+    # Step 1: Upload file section
+    html.Div([
+        dcc.Upload(
+            id='upload-data',
+            children=html.Div([
+                '📂 Drag and Drop or ',
+                html.A('Select a CSV File')
+            ]),
+            style={
+                'width': '100%',
+                'height': '60px',
+                'lineHeight': '60px',
+                'borderWidth': '1px',
+                'borderStyle': 'dashed',
+                'borderRadius': '5px',
+                'textAlign': 'center',
+                'margin': '10px 0'
+            },
+            multiple=False
+        ),
+        html.Div(id='upload-feedback', className='error-message')
+    ]),
+
+    # Step 2: Form inputs (hidden initially, shown after upload)
+    html.Div([
+        html.Label("📍 Location"),
+        dcc.Dropdown(
+            id='location-dropdown',
+            options=[
+                {'label': 'Downtown', 'value': 'Downtown'},
+                {'label': 'Suburb', 'value': 'Suburb'},
+                {'label': 'Uptown', 'value': 'Uptown'}
+            ],
+            placeholder="Select a location",
+            className='dash-dropdown'
+        ),
+
+        html.Label("📏 Size (in sqft)"),
+        dcc.Input(id='input-size', type='number', placeholder="Enter size"),
+
+        html.Label("🛏️ Rooms"),
+        dcc.Input(id='input-rooms', type='number', placeholder="Enter rooms"),
+
+        html.Button("🔍 Predict Price", id='predict-button', n_clicks=0)
+    ], id='input-form', style={'display': 'none'}),  # hide initially
+
+    # Output / Prediction text
+    html.Div(id='output-prediction')
+])
+
+
+def parse_contents(contents):
+    content_type, content_string = contents.split(',')
+    decoded = base64.b64decode(content_string)
+    try:
+        # Assume the user uploaded a CSV file
+        df = pd.read_csv(io.StringIO(decoded.decode('utf-8')))
+    except Exception as e:
+        return None, str(e)
+    return df, None
+
+
+@app.callback(
+    Output('upload-feedback', 'children'),
+    Output('input-form', 'style'),
+    Input('upload-data', 'contents')
+)
+def handle_file_upload(contents):
+    if contents is None:
+        return "", {'display': 'none'}
+
+    df, error = parse_contents(contents)
+    if error:
+        return f"❌ Error parsing file: {error}", {'display': 'none'}
+
+    # For demo, you could print or use df, here just show input form
+    return "✅ File uploaded successfully!", {'display': 'block'}
+
+
+@app.callback(
+    Output('output-prediction', 'children'),
+    Input('predict-button', 'n_clicks'),
+    State('location-dropdown', 'value'),
+    State('input-size', 'value'),
+    State('input-rooms', 'value')
+)
+def predict_price(n_clicks, location, size, rooms):
+    if n_clicks == 0:
+        return ""
+
+    if not location or size is None or rooms is None:
+        return html.Div("❌ Please fill all fields to get prediction.", id='error-message')
+
+    # One-hot encode location for the model
+    location_suburb = 1 if location == 'Suburb' else 0
+    location_uptown = 1 if location == 'Uptown' else 0
+
+    features = np.array([[size, rooms, location_suburb, location_uptown]])
+    predicted_usd = model.predict(features)[0]
+    predicted_inr = predicted_usd * USD_TO_INR
+
+    return html.Div([
+        html.Div("💰 Predicted Price", style={'marginBottom': '10px'}),
+        html.Div(f"💵 USD: ${predicted_usd:,.2f}", id='success-message'),
+        html.Div(f"🇮🇳 INR: ₹{predicted_inr:,.2f}", id='success-message')
+    ], id='output-prediction')
+
+
+if __name__ == '__main__':
+    app.run_server(debug=True)
