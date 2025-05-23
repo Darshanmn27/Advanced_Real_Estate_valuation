@@ -1,87 +1,74 @@
-# 🏡 Advanced Real Estate Valuation with Ensemble Regression Models
+# Real Estate Price Predictor 🏠
 
-## 📌 About the Project
+A sleek, professional, and interactive web application built with Dash to predict real estate prices based on user inputs and uploaded Excel data. The app leverages a trained Random Forest regression model for accurate price prediction in both USD and INR.
 
-This project focuses on predicting **real estate prices** using **ensemble regression models** such as **Random Forest, Gradient Boosting, and XGBoost**. The model is trained on various property attributes like **location, size, number of rooms, and market trends** to provide an accurate valuation of properties.
+## Table of Contents
+- [About](#about)
+- [Features](#features)
+- [Demo](#demo)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Model](#model)
+- [File Upload](#file-upload)
+- [Technologies Used](#technologies-used)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
 
-## 📊 Features
+## About
+This application allows users to upload an Excel file containing real estate data and then input parameters such as location, property size, and number of rooms to predict the price. The app uses a Random Forest regression model trained to estimate property prices based on features such as size, rooms, and location.
 
-✔️ Data Preprocessing & Cleaning\
-✔️ Feature Engineering\
-✔️ Exploratory Data Analysis (EDA)\
-✔️ Model Training with Multiple Regression Algorithms\
-✔️ Performance Evaluation & Model Comparison\
-✔️ Visualization of Predicted vs. Actual Prices
+## Features
+- **Excel File Upload**: Users can upload an Excel file (.xlsx) with property data.
+- **Dynamic Input Form**: Select location and enter property size and rooms.
+- **Price Prediction**: Predicts real estate prices in both USD and INR (currency conversion included).
+- **User-Friendly UI**: Clean, modern design with Google Fonts and responsive layout.
+- **Error Handling**: Validates user inputs and file upload status.
 
-## 🛠️ Technologies Used
+## Demo
+_Add a GIF or screenshot here to showcase your app interface._
 
-- **Python** (Pandas, NumPy, Matplotlib, Seaborn, Scikit-Learn)
-- **Machine Learning** (Regression Models, Feature Selection, Hyperparameter Tuning)
-- **Jupyter Notebook**
-- **Git & GitHub** for version control
-
-## 📂 Project Structure
-
-```
-real-estate-valuation/
-│── data/                  # Dataset files
-│── models/                # Saved machine learning models
-│── notebooks/             # Jupyter Notebooks with experiments
-│── results/               # Model performance reports & visualizations
-│── requirements.txt       # Dependencies
-│── README.md              # Project documentation
-└── Advanced_Real_Estate_Valuation.ipynb  # Main Jupyter Notebook
-```
-
-## 🚀 How to Run the Project
-
-### 1️⃣ Clone the Repository
-
+## Installation
+### Clone the repository:
 ```bash
-git clone https://github.com/your-username/real-estate-valuation.git
-cd real-estate-valuation
+git clone https://github.com/yourusername/real-estate-price-predictor.git
+cd real-estate-price-predictor
 ```
+Features include:
+Property size (sqft)
 
-### 2️⃣ Install Dependencies
+Number of rooms
 
-Make sure you have Python installed. Then, run:
+Location (One-hot encoded: Downtown, Suburb, Uptown)
 
-```bash
-pip install -r requirements.txt
-```
+Currency conversion from USD to INR uses a static rate (1 USD = 83.5 INR).
+File Upload
+Supported format: .xlsx (Excel file)
 
-### 3️⃣ Run the Jupyter Notebook
+Upon successful upload, the app enables the input form to enter details for price prediction.
 
-Start Jupyter Notebook and open the main project file:
+Handles file reading errors gracefully.
 
-```bash
-jupyter notebook
-```
+Technologies Used
+Python 3.8+
 
-Run all the cells to execute data preprocessing, model training, and evaluation.
+Dash - For web app framework
 
-## 📈 Results & Insights
+Pandas - Data processing
 
-The project compares different regression models and evaluates their performance based on metrics such as:
+NumPy - Numerical operations
 
-- **Mean Absolute Error (MAE)**
-- **Mean Squared Error (MSE)**
-- **R² Score**
+Scikit-learn - Machine Learning model loading
 
-## 🔥 Future Enhancements
+Joblib - Model serialization
 
-🔹 Adding Deep Learning models like ANN for valuation\
-🔹 Improving feature selection techniques\
-🔹 Deploying the model using Flask or FastAPI
+Contributing
+Contributions, issues, and feature requests are welcome! Feel free to check the issues page.
 
-## 🤝 Contributing
+License
+This project is licensed under the MIT License. See the LICENSE file for details.
 
-Contributions are welcome! Feel free to **fork** the repo and create a pull request.
+Contact
+Developed by Darshan M N
 
-## 📜 License
 
-This project is open-source under the **MIT License**.
-
----
-
-💡 **If you like this project, please ⭐ the repository to support!** 
